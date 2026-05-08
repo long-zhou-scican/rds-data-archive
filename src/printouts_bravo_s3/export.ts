@@ -1,4 +1,4 @@
-import { printoutsBravoS3Service } from "duckdb_parquet_s3_library";
+import { printoutsBravoS3Service } from "datalayer";
 
 async function main() {
 
