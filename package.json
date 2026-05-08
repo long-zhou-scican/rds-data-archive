@@ -1,0 +1,17 @@
+{
+  "name": "duckdb-s3-access-levels",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "ts-node src/update-access-levels.ts",
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "duckdb_parquet_s3_library": "file:../duckdb_parquet_s3_library"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

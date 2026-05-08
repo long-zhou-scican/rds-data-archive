@@ -1,0 +1,12 @@
+.DS_Store
+**/node_modules
+**/.serverless
+.env
+.build
+.vscode/
+/coverage
+dev.sh
+env.local.yml
+serverless.local.yml
+sync-local-config.sh
+/dist
