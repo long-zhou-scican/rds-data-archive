@@ -1,5 +1,5 @@
 
-import { accessLevelsService } from 'duckdb_parquet_s3_library';
+import { accessLevelsService } from 'datalayer';
 
 async function main() {
 
