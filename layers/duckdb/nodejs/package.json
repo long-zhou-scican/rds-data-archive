@@ -1,0 +1,9 @@
+{
+  "name": "duckdb-layer",
+  "private": true,
+  "version": "1.0.0",
+  "description": "DuckDB dependencies for Lambda layer",
+  "dependencies": {
+    "duckdb": "^1.4.4"
+  }
+}

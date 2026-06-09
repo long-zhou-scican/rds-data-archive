@@ -1,0 +1,171 @@
+service: rds-data-archive
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  timeout: 900
+  memorySize: 1536
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetBucketLocation
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+          Resource:
+            - arn:aws:s3:::${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}/*
+custom:
+  prod:
+    subdomain: ''
+    subdomainEnabled: true
+    mqttTopicEnv: 'P'
+    recordsEventStreamShardCount: 1
+    envSuffix: prod
+    vpcSuffix: prod
+    region: 'us-east-1'
+  dr:
+    subdomain: ''
+    subdomainEnabled: false # Disable custom domain for DR stage
+    mqttTopicEnv: 'P'
+    recordsEventStreamShardCount: 1
+    envSuffix: dr
+    vpcSuffix: prod-dr
+    region: 'us-west-2'
+  qa:
+    subdomain: '.qa'
+    subdomainEnabled: true
+    mqttTopicEnv: 'Q'
+    recordsEventStreamShardCount: 1
+    envSuffix: qa
+    vpcSuffix: qa
+    region: 'us-east-1'
+  dev:
+    subdomain: '.dev'
+    subdomainEnabled: true
+    mqttTopicEnv: 'D'
+    recordsEventStreamShardCount: 1
+    envSuffix: dev
+    vpcSuffix: dev
+    region: 'us-east-1'
+  uat:
+    subdomain: '.uat'
+    subdomainEnabled: true
+    mqttTopicEnv: 'U'
+    recordsEventStreamShardCount: 1
+    envSuffix: uat
+    vpcSuffix: uat
+    region: 'us-east-1'
+package:
+  individually: true
+  patterns:
+    - '!**'
+    - dist-lambda/**
+    - datalayer/dist/**
+    - datalayer/node_modules/**
+    - '!datalayer/node_modules/duckdb/**'
+    - '!datalayer/node_modules/@mapbox/node-pre-gyp/**'
+    - '!datalayer/node_modules/node-addon-api/**'
+    - '!datalayer/node_modules/typescript/**'
+    - '!datalayer/node_modules/@types/**'
+    - '!datalayer/node_modules/node-gyp/**'
+    - '!datalayer/node_modules/**/src/**'
+    - '!datalayer/node_modules/**/test/**'
+    - '!datalayer/node_modules/**/tests/**'
+    - '!datalayer/node_modules/**/docs/**'
+    - '!datalayer/node_modules/**/example/**'
+    - '!datalayer/node_modules/**/examples/**'
+    - '!datalayer/node_modules/**/.github/**'
+    - '!datalayer/node_modules/**/tsconfig*.json'
+    - '!datalayer/node_modules/**/binding.gyp*'
+    - '!datalayer/node_modules/**/vendor.py'
+    - '!datalayer/node_modules/**/.mocharc.json'
+
+layers:
+  duckdb:
+    name: ${self:service}-${sls:stage}-duckdb
+    description: DuckDB runtime dependency layer
+    path: layers/duckdb
+    compatibleRuntimes:
+      - nodejs20.x
+    package:
+      patterns:
+        - '!**'
+        - nodejs/node_modules/**
+        - '!nodejs/node_modules/**/src/**'
+        - '!nodejs/node_modules/**/test/**'
+        - '!nodejs/node_modules/**/tests/**'
+        - '!nodejs/node_modules/**/docs/**'
+        - '!nodejs/node_modules/**/example/**'
+        - '!nodejs/node_modules/**/examples/**'
+        - '!nodejs/node_modules/**/.github/**'
+        - '!nodejs/node_modules/**/tsconfig*.json'
+        - '!nodejs/node_modules/**/binding.gyp*'
+        - '!nodejs/node_modules/**/vendor.py'
+        - '!nodejs/node_modules/**/.mocharc.json'
+
+functions:
+  printoutsBravoExport:
+    name: ${self:service}-${sls:stage}-printouts-bravo-export
+    handler: dist-lambda/handlers/printoutsBravoExportHandler.handler
+    description: Export printouts_bravo data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+
+  printoutsBravoExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-bravo-export-schedule
+    handler: dist-lambda/schedules/printoutsBravoExportSchedule.handler
+    description: Scheduled export of printouts_bravo data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: ${ssm:/rds-data-archive/${self:provider.stage}/schedules/printouts-bravo-export, 'cron(10 2 * * ? *)'}
+          enabled: true
+
+  # printoutsStatimExportSchedule:
+  #   name: ${self:service}-${sls:stage}-printouts-statim-export-schedule
+  #   handler: dist-lambda/schedules/printoutsStatimExportSchedule.handler
+  #   description: Scheduled export of printouts_statim data to S3
+  #   vpc: ${file(env.yml):vpc-${self:provider.stage}}
+  #   environment:
+  #     DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+  #     DB_PORT: ${param:dbPort, '3306'}
+  #     DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+  #     DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+  #     DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+  #     S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+  #     region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+  #   layers:
+  #     - { Ref: DuckdbLambdaLayer }
+  #   events:
+  #     - schedule:
+  #         rate: ${ssm:/rds-data-archive/${self:provider.stage}/schedules/printouts-statim-export, 'cron(20 2 * * ? *)'}
+  #         enabled: true

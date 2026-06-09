@@ -10,3 +10,4 @@ env.local.yml
 serverless.local.yml
 sync-local-config.sh
 /dist
+/dist-lambda

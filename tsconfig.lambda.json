@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist-lambda",
+    "rootDir": "./src",
+    "module": "CommonJS",
+    "moduleResolution": "Node"
+  },
+  "include": ["src/handlers/**/*", "src/schedules/**/*"]
+}
