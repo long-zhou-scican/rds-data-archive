@@ -102,8 +102,8 @@ export async function demoQueryFromMysqlAndS3(
 }
 
 async function main() {
-  console.log('Querying printouts_bravo_s3 from MySQL and S3/DuckDB for date range 2021/05/06 - 2025/05/16...', Date.now());
-  const result = await demoQueryFromMysqlAndS3("2021/05/06", "2025/05/16");
+  console.log('Querying printouts_bravo_s3 from MySQL and S3/DuckDB for date range 2017/05/06 - 2025/05/16...', Date.now());
+  const result = await demoQueryFromMysqlAndS3("2017/05/06", "2025/05/16");
   console.log(`mysql rows: ${result.mysql.length}`, Date.now());
   console.log(`s3 rows: ${result.s3.length}`, Date.now());
   console.log('sample mysql printout_file_name:', result.mysql.slice(0, 5).map(d => d.printout_file_name).join(', '));

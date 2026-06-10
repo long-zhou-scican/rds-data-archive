@@ -132,7 +132,7 @@ functions:
 
   printoutsBravoExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-bravo-export-schedule
-    handler: dist-lambda/schedules/printoutsBravoExportSchedule.handler
+    handler: dist-lambda/schedules/printous/printoutsBravoExportSchedule.handler
     description: Scheduled export of printouts_bravo data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
     environment:
@@ -147,25 +147,705 @@ functions:
       - { Ref: DuckdbLambdaLayer }
     events:
       - schedule:
-          rate: ${ssm:/rds-data-archive/${self:provider.stage}/schedules/printouts-bravo-export, 'cron(10 2 * * ? *)'}
+          rate: cron(20 3 * * ? *)
           enabled: true
 
-  # printoutsStatimExportSchedule:
-  #   name: ${self:service}-${sls:stage}-printouts-statim-export-schedule
-  #   handler: dist-lambda/schedules/printoutsStatimExportSchedule.handler
-  #   description: Scheduled export of printouts_statim data to S3
-  #   vpc: ${file(env.yml):vpc-${self:provider.stage}}
-  #   environment:
-  #     DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
-  #     DB_PORT: ${param:dbPort, '3306'}
-  #     DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
-  #     DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
-  #     DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
-  #     S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
-  #     region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
-  #   layers:
-  #     - { Ref: DuckdbLambdaLayer }
-  #   events:
-  #     - schedule:
-  #         rate: ${ssm:/rds-data-archive/${self:provider.stage}/schedules/printouts-statim-export, 'cron(20 2 * * ? *)'}
-  #         enabled: true
+  auditLogExportSchedule:
+    name: ${self:service}-${sls:stage}-audit-log-export-schedule
+    handler: dist-lambda/schedules/auditLogExportSchedule.handler
+    description: Scheduled export of audit_log data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(30 3 * * ? *)
+          enabled: true
+
+  cycleReportsLogExportSchedule:
+    name: ${self:service}-${sls:stage}-cycle-reports-log-export-schedule
+    handler: dist-lambda/schedules/cycleReportsLogExportSchedule.handler
+    description: Scheduled export of cycle_reports_log data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(40 3 * * ? *)
+          enabled: true
+
+  fdbuttonsExportSchedule:
+    name: ${self:service}-${sls:stage}-fdbuttons-export-schedule
+    handler: dist-lambda/schedules/fdbuttonsExportSchedule.handler
+    description: Scheduled export of fdbuttons data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(50 3 * * ? *)
+          enabled: true
+
+  isUpdateAvailableArchiveExportSchedule:
+    name: ${self:service}-${sls:stage}-is-update-available-archive-export-schedule
+    handler: dist-lambda/schedules/isUpdateAvailableArchiveExportSchedule.handler
+    description: Scheduled export of is_update_available_archive data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(10 4 * * ? *)
+          enabled: true
+
+  isUpdateAvailableDailyLogExportSchedule:
+    name: ${self:service}-${sls:stage}-is-update-available-daily-log-export-schedule
+    handler: dist-lambda/schedules/isUpdateAvailableDailyLogExportSchedule.handler
+    description: Scheduled export of is_update_available_daily_log data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(20 4 * * ? *)
+          enabled: true
+
+  isupdatesAvailableLogExportSchedule:
+    name: ${self:service}-${sls:stage}-isupdates-available-log-export-schedule
+    handler: dist-lambda/schedules/isupdatesAvailableLogExportSchedule.handler
+    description: Scheduled export of isupdates_available_log data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(30 4 * * ? *)
+          enabled: true
+
+  onlineAccessTokensExportSchedule:
+    name: ${self:service}-${sls:stage}-online-access-tokens-export-schedule
+    handler: dist-lambda/schedules/onlineAccessTokensExportSchedule.handler
+    description: Scheduled export of online_access_tokens data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(40 4 * * ? *)
+          enabled: true
+
+  printoutsEmailAttachmentExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-email-attachment-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsEmailAttachmentExportSchedule.handler
+    description: Scheduled export of printouts/printouts_email_attachment data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(50 4 * * ? *)
+          enabled: true
+
+  printoutsEmailAttachmentOldExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-email-attachment-old-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsEmailAttachmentOldExportSchedule.handler
+    description: Scheduled export of printouts/printouts_email_attachment_old data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(0 5 * * ? *)
+          enabled: true
+
+  printoutsEmailAttachmentRecoveryExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-email-attachment-recovery-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsEmailAttachmentRecoveryExportSchedule.handler
+    description: Scheduled export of printouts/printouts_email_attachment_recovery data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(10 5 * * ? *)
+          enabled: true
+
+  printoutsEmailMd5sumLockExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-email-md5sum-lock-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsEmailMd5sumLockExportSchedule.handler
+    description: Scheduled export of printouts/printouts_email_md5sum_lock data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(20 5 * * ? *)
+          enabled: true
+
+  printoutsFaultyDataExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-faulty-data-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsFaultyDataExportSchedule.handler
+    description: Scheduled export of printouts/printouts_faulty_data data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(30 5 * * ? *)
+          enabled: true
+
+  printoutsHydrimAdtExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-adt-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimAdtExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_adt data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(40 5 * * ? *)
+          enabled: true
+
+  printoutsHydrimDocuCiExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-ci-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimDocuCiExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_docu_ci data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(50 5 * * ? *)
+          enabled: true
+
+  printoutsHydrimDocuEntriesExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimDocuEntriesExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_docu_entries data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(0 6 * * ? *)
+          enabled: true
+
+  printoutsHydrimDocuEntriesNoteExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries-note-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimDocuEntriesNoteExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_docu_entries_note data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(10 6 * * ? *)
+          enabled: true
+
+  printoutsHydrimDocuGccExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-gcc-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimDocuGccExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_docu_gcc data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(20 6 * * ? *)
+          enabled: true
+
+  printoutsHydrimExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_s3 data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(30 6 * * ? *)
+          enabled: true
+
+  printoutsHydrimMonthExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-hydrim-month-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsHydrimMonthExportSchedule.handler
+    description: Scheduled export of printouts/printouts_hydrim_month data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(40 6 * * ? *)
+          enabled: true
+
+  printoutsMovedToArchivesExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-moved-to-archives-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsMovedToArchivesExportSchedule.handler
+    description: Scheduled export of printouts/printouts_moved_to_archives data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(50 6 * * ? *)
+          enabled: true
+
+  printoutsStatimAdtExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-adt-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimAdtExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_adt data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(0 7 * * ? *)
+          enabled: true
+
+  printoutsStatimDocuCiExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-ci-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimDocuCiExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_docu_ci data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(10 7 * * ? *)
+          enabled: true
+
+  printoutsStatimDocuEntriesExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-entries-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimDocuEntriesExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_docu_entries data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(20 7 * * ? *)
+          enabled: true
+
+  printoutsStatimDocuEntriesNoteExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-entries-note-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimDocuEntriesNoteExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_docu_entries_note data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(30 7 * * ? *)
+          enabled: true
+
+  printoutsStatimDocuGccExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-gcc-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimDocuGccExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_docu_gcc data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(40 7 * * ? *)
+          enabled: true
+
+  printoutsStatimExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_s3 data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(50 7 * * ? *)
+          enabled: true
+
+  printoutsStatimMonthExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-statim-month-export-schedule
+    handler: dist-lambda/schedules/printous/printoutsStatimMonthExportSchedule.handler
+    description: Scheduled export of printouts/printouts_statim_month data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(0 8 * * ? *)
+          enabled: true
+
+  productsSparePartsImagesExportSchedule:
+    name: ${self:service}-${sls:stage}-products-spare-parts-images-export-schedule
+    handler: dist-lambda/schedules/productsSparePartsImagesExportSchedule.handler
+    description: Scheduled export of products_spare_parts_images data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(10 8 * * ? *)
+          enabled: true
+
+  reportsImagesExportSchedule:
+    name: ${self:service}-${sls:stage}-reports-images-export-schedule
+    handler: dist-lambda/schedules/reportsImagesExportSchedule.handler
+    description: Scheduled export of reports_images data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(20 8 * * ? *)
+          enabled: true
+
+  reportsUploadExportSchedule:
+    name: ${self:service}-${sls:stage}-reports-upload-export-schedule
+    handler: dist-lambda/schedules/reportsUploadExportSchedule.handler
+    description: Scheduled export of reportsUpload data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(30 8 * * ? *)
+          enabled: true
+
+  unitsCfNotificationsExportSchedule:
+    name: ${self:service}-${sls:stage}-units-cf-notifications-export-schedule
+    handler: dist-lambda/schedules/unitsCfNotificationsExportSchedule.handler
+    description: Scheduled export of units_cf_notifications data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(40 8 * * ? *)
+          enabled: true
+
+  unitsDailyDetailSummaryExportSchedule:
+    name: ${self:service}-${sls:stage}-units-daily-detail-summary-export-schedule
+    handler: dist-lambda/schedules/unitsDailyDetailSummaryExportSchedule.handler
+    description: Scheduled export of units_daily_detail_summary data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(50 8 * * ? *)
+          enabled: true
+
+  unitsDailyGeneralCountSummaryExportSchedule:
+    name: ${self:service}-${sls:stage}-units-daily-general-count-summary-export-schedule
+    handler: dist-lambda/schedules/unitsDailyGeneralCountSummaryExportSchedule.handler
+    description: Scheduled export of units_daily_general_count_summary data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(0 9 * * ? *)
+          enabled: true
+
+  unitsEncryptedKeysArchivesExportSchedule:
+    name: ${self:service}-${sls:stage}-units-encrypted-keys-archives-export-schedule
+    handler: dist-lambda/schedules/unitsEncryptedKeysArchivesExportSchedule.handler
+    description: Scheduled export of units_encrypted_keys_archives data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(10 9 * * ? *)
+          enabled: true
+
+  unitsOffsetsExportSchedule:
+    name: ${self:service}-${sls:stage}-units-offsets-export-schedule
+    handler: dist-lambda/schedules/unitsOffsetsExportSchedule.handler
+    description: Scheduled export of units_offsets data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(20 9 * * ? *)
+          enabled: true
