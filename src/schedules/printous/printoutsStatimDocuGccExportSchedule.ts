@@ -1,7 +1,8 @@
 import { printoutsStatimDocuGccService } from "../../../datalayer/dist/index.js";
+import { getExportArgs } from "../exportScheduleParams.js";
 
 export const handler = async (): Promise<{ message: string; keys: string[] }> => {
-  const result = await printoutsStatimDocuGccService.export();
+  const result = await printoutsStatimDocuGccService.export(...getExportArgs("printoutsStatimDocuGccService"));
   const keys = Array.isArray(result) ? result : [result];
   console.log(`Scheduled export completed for printouts/printouts_statim_docu_gcc. Files: ${keys.length}`);
 

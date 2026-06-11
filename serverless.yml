@@ -27,7 +27,7 @@ provider:
 custom:
   prod:
     subdomain: ''
-    subdomainEnabled: true
+    subdomainenabled: false
     mqttTopicEnv: 'P'
     recordsEventStreamShardCount: 1
     envSuffix: prod
@@ -43,7 +43,7 @@ custom:
     region: 'us-west-2'
   qa:
     subdomain: '.qa'
-    subdomainEnabled: true
+    subdomainenabled: false
     mqttTopicEnv: 'Q'
     recordsEventStreamShardCount: 1
     envSuffix: qa
@@ -51,7 +51,7 @@ custom:
     region: 'us-east-1'
   dev:
     subdomain: '.dev'
-    subdomainEnabled: true
+    subdomainenabled: false
     mqttTopicEnv: 'D'
     recordsEventStreamShardCount: 1
     envSuffix: dev
@@ -59,17 +59,24 @@ custom:
     region: 'us-east-1'
   uat:
     subdomain: '.uat'
-    subdomainEnabled: true
+    subdomainenabled: false
     mqttTopicEnv: 'U'
     recordsEventStreamShardCount: 1
     envSuffix: uat
     vpcSuffix: uat
     region: 'us-east-1'
+  customDomain:
+    enabled: ${self:custom.${self:provider.stage}.subdomainEnabled, false}
+    domainName: webservices${self:custom.${self:provider.stage}.subdomain, ''}.scicanapi.com
+    basePath: 'data-archive'
+    stage: ${self:provider.stage}
+    createRoute53Record: true
 package:
   individually: true
   patterns:
     - '!**'
     - dist-lambda/**
+    - src/schedules/exportScheduleParams.json
     - datalayer/dist/**
     - datalayer/node_modules/**
     - '!datalayer/node_modules/duckdb/**'
@@ -114,6 +121,24 @@ layers:
         - '!nodejs/node_modules/**/.mocharc.json'
 
 functions:
+  genericDataSearch:
+    name: ${self:service}-${sls:stage}-generic-data-search
+    handler: dist-lambda/handlers/genericDataSearchHandler.handler
+    description: Generic table data search by date range
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+    events:
+      - httpApi:
+          path: /generic-data-search
+          method: post
+
   printoutsBravoExport:
     name: ${self:service}-${sls:stage}-printouts-bravo-export
     handler: dist-lambda/handlers/printoutsBravoExportHandler.handler
@@ -148,7 +173,7 @@ functions:
     events:
       - schedule:
           rate: cron(20 3 * * ? *)
-          enabled: true
+          enabled: false
 
   auditLogExportSchedule:
     name: ${self:service}-${sls:stage}-audit-log
@@ -168,7 +193,7 @@ functions:
     events:
       - schedule:
           rate: cron(30 3 * * ? *)
-          enabled: true
+          enabled: false
 
   cycleReportsLogExportSchedule:
     name: ${self:service}-${sls:stage}-cycle-reports-log
@@ -188,7 +213,7 @@ functions:
     events:
       - schedule:
           rate: cron(40 3 * * ? *)
-          enabled: true
+          enabled: false
 
   fdbuttonsExportSchedule:
     name: ${self:service}-${sls:stage}-fdbuttons
@@ -208,7 +233,7 @@ functions:
     events:
       - schedule:
           rate: cron(50 3 * * ? *)
-          enabled: true
+          enabled: false
 
   isUpdateAvailableArchiveExportSchedule:
     name: ${self:service}-${sls:stage}-is-update-available-archive
@@ -228,7 +253,7 @@ functions:
     events:
       - schedule:
           rate: cron(10 4 * * ? *)
-          enabled: true
+          enabled: false
 
   isUpdateAvailableDailyLogExportSchedule:
     name: ${self:service}-${sls:stage}-is-update-available-daily-log
@@ -248,7 +273,7 @@ functions:
     events:
       - schedule:
           rate: cron(20 4 * * ? *)
-          enabled: true
+          enabled: false
 
   isupdatesAvailableLogExportSchedule:
     name: ${self:service}-${sls:stage}-isupdates-available-log
@@ -268,7 +293,7 @@ functions:
     events:
       - schedule:
           rate: cron(30 4 * * ? *)
-          enabled: true
+          enabled: false
 
   onlineAccessTokensExportSchedule:
     name: ${self:service}-${sls:stage}-online-access-tokens
@@ -288,7 +313,7 @@ functions:
     events:
       - schedule:
           rate: cron(40 4 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsEmailAttachmentExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-email-attachment
@@ -308,7 +333,7 @@ functions:
     events:
       - schedule:
           rate: cron(50 4 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsEmailAttachmentOldExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-email-attachment-old
@@ -328,7 +353,7 @@ functions:
     events:
       - schedule:
           rate: cron(0 5 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsEmailAttachmentRecoveryExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-email-attachment-recovery
@@ -348,7 +373,7 @@ functions:
     events:
       - schedule:
           rate: cron(10 5 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsEmailMd5sumLockExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-email-md5sum-lock
@@ -368,7 +393,7 @@ functions:
     events:
       - schedule:
           rate: cron(20 5 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsFaultyDataExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-faulty-data
@@ -388,7 +413,7 @@ functions:
     events:
       - schedule:
           rate: cron(30 5 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimAdtExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim-adt
@@ -408,7 +433,7 @@ functions:
     events:
       - schedule:
           rate: cron(40 5 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimDocuCiExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim-docu-ci
@@ -428,7 +453,7 @@ functions:
     events:
       - schedule:
           rate: cron(50 5 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimDocuEntriesExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries
@@ -448,7 +473,7 @@ functions:
     events:
       - schedule:
           rate: cron(0 6 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimDocuEntriesNoteExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries-note
@@ -468,7 +493,7 @@ functions:
     events:
       - schedule:
           rate: cron(10 6 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimDocuGccExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim-docu-gcc
@@ -488,7 +513,7 @@ functions:
     events:
       - schedule:
           rate: cron(20 6 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim
@@ -508,7 +533,7 @@ functions:
     events:
       - schedule:
           rate: cron(30 6 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsHydrimMonthExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-hydrim-month
@@ -528,7 +553,7 @@ functions:
     events:
       - schedule:
           rate: cron(40 6 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsMovedToArchivesExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-moved-to-archives
@@ -548,7 +573,7 @@ functions:
     events:
       - schedule:
           rate: cron(50 6 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimAdtExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim-adt
@@ -568,7 +593,7 @@ functions:
     events:
       - schedule:
           rate: cron(0 7 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimDocuCiExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim-docu-ci
@@ -588,7 +613,7 @@ functions:
     events:
       - schedule:
           rate: cron(10 7 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimDocuEntriesExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim-docu-entries
@@ -608,7 +633,7 @@ functions:
     events:
       - schedule:
           rate: cron(20 7 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimDocuEntriesNoteExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim-docu-entries-note
@@ -628,7 +653,7 @@ functions:
     events:
       - schedule:
           rate: cron(30 7 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimDocuGccExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim-docu-gcc
@@ -648,7 +673,7 @@ functions:
     events:
       - schedule:
           rate: cron(40 7 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim
@@ -668,7 +693,7 @@ functions:
     events:
       - schedule:
           rate: cron(50 7 * * ? *)
-          enabled: true
+          enabled: false
 
   printoutsStatimMonthExportSchedule:
     name: ${self:service}-${sls:stage}-printouts-statim-month
@@ -688,7 +713,7 @@ functions:
     events:
       - schedule:
           rate: cron(0 8 * * ? *)
-          enabled: true
+          enabled: false
 
   productsSparePartsImagesExportSchedule:
     name: ${self:service}-${sls:stage}-products-spare-parts-images
@@ -708,7 +733,7 @@ functions:
     events:
       - schedule:
           rate: cron(10 8 * * ? *)
-          enabled: true
+          enabled: false
 
   reportsImagesExportSchedule:
     name: ${self:service}-${sls:stage}-reports-images
@@ -728,7 +753,7 @@ functions:
     events:
       - schedule:
           rate: cron(20 8 * * ? *)
-          enabled: true
+          enabled: false
 
   reportsUploadExportSchedule:
     name: ${self:service}-${sls:stage}-reports-upload
@@ -748,7 +773,7 @@ functions:
     events:
       - schedule:
           rate: cron(30 8 * * ? *)
-          enabled: true
+          enabled: false
 
   unitsCfNotificationsExportSchedule:
     name: ${self:service}-${sls:stage}-units-cf-notifications
@@ -768,7 +793,7 @@ functions:
     events:
       - schedule:
           rate: cron(40 8 * * ? *)
-          enabled: true
+          enabled: false
 
   unitsDailyDetailSummaryExportSchedule:
     name: ${self:service}-${sls:stage}-units-daily-detail-summary
@@ -788,7 +813,7 @@ functions:
     events:
       - schedule:
           rate: cron(50 8 * * ? *)
-          enabled: true
+          enabled: false
 
   unitsDailyGeneralCountSummaryExportSchedule:
     name: ${self:service}-${sls:stage}-units-daily-general-count-summary
@@ -808,7 +833,7 @@ functions:
     events:
       - schedule:
           rate: cron(0 9 * * ? *)
-          enabled: true
+          enabled: false
 
   unitsEncryptedKeysArchivesExportSchedule:
     name: ${self:service}-${sls:stage}-units-encrypted-keys-archives
@@ -828,7 +853,7 @@ functions:
     events:
       - schedule:
           rate: cron(10 9 * * ? *)
-          enabled: true
+          enabled: false
 
   unitsOffsetsExportSchedule:
     name: ${self:service}-${sls:stage}-units-offsets
@@ -848,4 +873,4 @@ functions:
     events:
       - schedule:
           rate: cron(20 9 * * ? *)
-          enabled: true
+          enabled: false

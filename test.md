@@ -10,13 +10,20 @@
 
 ./dev.sh unitsCfNotificationsExportSchedule
 
-<!-- fdbuttonsExportSchedule:
+# fdbuttonsExportSchedule:
+
 ./dev.sh fdbuttonsExportSchedule
-isUpdateAvailableArchiveExportSchedule:
+
+# isUpdateAvailableArchiveExportSchedule:
+
 ./dev.sh isUpdateAvailableArchiveExportSchedule
-isUpdateAvailableDailyLogExportSchedule:
+
+# isUpdateAvailableDailyLogExportSchedule:
+
 ./dev.sh isUpdateAvailableDailyLogExportSchedule
-isupdatesAvailableLogExportSchedule:
+
+# isupdatesAvailableLogExportSchedule:
+
 ./dev.sh isupdatesAvailableLogExportSchedule
 onlineAccessTokensExportSchedule:
 ./dev.sh onlineAccessTokensExportSchedule

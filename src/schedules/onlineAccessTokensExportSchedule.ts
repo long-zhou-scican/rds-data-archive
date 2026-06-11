@@ -1,7 +1,8 @@
 import { onlineAccessTokensService } from "../../datalayer/dist/index.js";
+import { getExportArgs } from "./exportScheduleParams.js";
 
 export const handler = async (): Promise<{ message: string; keys: string[] }> => {
-  const result = await onlineAccessTokensService.export();
+  const result = await onlineAccessTokensService.export(...getExportArgs("onlineAccessTokensService"));
   const keys = Array.isArray(result) ? result : [result];
   console.log(`Scheduled export completed for online_access_tokens. Files: ${keys.length}`);
 

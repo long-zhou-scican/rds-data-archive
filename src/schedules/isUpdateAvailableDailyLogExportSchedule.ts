@@ -1,7 +1,8 @@
 import { isUpdateAvailableDailyLogService } from "../../datalayer/dist/index.js";
+import { getExportArgs } from "./exportScheduleParams.js";
 
 export const handler = async (): Promise<{ message: string; keys: string[] }> => {
-  const result = await isUpdateAvailableDailyLogService.export();
+  const result = await isUpdateAvailableDailyLogService.export(...getExportArgs("isUpdateAvailableDailyLogService"));
   const keys = Array.isArray(result) ? result : [result];
   console.log(`Scheduled export completed for is_update_available_daily_log. Files: ${keys.length}`);
 
