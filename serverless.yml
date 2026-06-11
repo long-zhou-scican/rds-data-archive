@@ -1,4 +1,4 @@
-service: rds-data-archive
+service: data-archive
 
 frameworkVersion: '3'
 
@@ -131,7 +131,7 @@ functions:
       - { Ref: DuckdbLambdaLayer }
 
   printoutsBravoExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-bravo-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-bravo
     handler: dist-lambda/schedules/printous/printoutsBravoExportSchedule.handler
     description: Scheduled export of printouts_bravo data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -151,7 +151,7 @@ functions:
           enabled: true
 
   auditLogExportSchedule:
-    name: ${self:service}-${sls:stage}-audit-log-export-schedule
+    name: ${self:service}-${sls:stage}-audit-log
     handler: dist-lambda/schedules/auditLogExportSchedule.handler
     description: Scheduled export of audit_log data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -171,7 +171,7 @@ functions:
           enabled: true
 
   cycleReportsLogExportSchedule:
-    name: ${self:service}-${sls:stage}-cycle-reports-log-export-schedule
+    name: ${self:service}-${sls:stage}-cycle-reports-log
     handler: dist-lambda/schedules/cycleReportsLogExportSchedule.handler
     description: Scheduled export of cycle_reports_log data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -191,7 +191,7 @@ functions:
           enabled: true
 
   fdbuttonsExportSchedule:
-    name: ${self:service}-${sls:stage}-fdbuttons-export-schedule
+    name: ${self:service}-${sls:stage}-fdbuttons
     handler: dist-lambda/schedules/fdbuttonsExportSchedule.handler
     description: Scheduled export of fdbuttons data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -211,7 +211,7 @@ functions:
           enabled: true
 
   isUpdateAvailableArchiveExportSchedule:
-    name: ${self:service}-${sls:stage}-is-update-available-archive-export-schedule
+    name: ${self:service}-${sls:stage}-is-update-available-archive
     handler: dist-lambda/schedules/isUpdateAvailableArchiveExportSchedule.handler
     description: Scheduled export of is_update_available_archive data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -231,7 +231,7 @@ functions:
           enabled: true
 
   isUpdateAvailableDailyLogExportSchedule:
-    name: ${self:service}-${sls:stage}-is-update-available-daily-log-export-schedule
+    name: ${self:service}-${sls:stage}-is-update-available-daily-log
     handler: dist-lambda/schedules/isUpdateAvailableDailyLogExportSchedule.handler
     description: Scheduled export of is_update_available_daily_log data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -251,7 +251,7 @@ functions:
           enabled: true
 
   isupdatesAvailableLogExportSchedule:
-    name: ${self:service}-${sls:stage}-isupdates-available-log-export-schedule
+    name: ${self:service}-${sls:stage}-isupdates-available-log
     handler: dist-lambda/schedules/isupdatesAvailableLogExportSchedule.handler
     description: Scheduled export of isupdates_available_log data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -271,7 +271,7 @@ functions:
           enabled: true
 
   onlineAccessTokensExportSchedule:
-    name: ${self:service}-${sls:stage}-online-access-tokens-export-schedule
+    name: ${self:service}-${sls:stage}-online-access-tokens
     handler: dist-lambda/schedules/onlineAccessTokensExportSchedule.handler
     description: Scheduled export of online_access_tokens data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -291,7 +291,7 @@ functions:
           enabled: true
 
   printoutsEmailAttachmentExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-email-attachment-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-email-attachment
     handler: dist-lambda/schedules/printous/printoutsEmailAttachmentExportSchedule.handler
     description: Scheduled export of printouts/printouts_email_attachment data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -311,7 +311,7 @@ functions:
           enabled: true
 
   printoutsEmailAttachmentOldExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-email-attachment-old-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-email-attachment-old
     handler: dist-lambda/schedules/printous/printoutsEmailAttachmentOldExportSchedule.handler
     description: Scheduled export of printouts/printouts_email_attachment_old data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -331,7 +331,7 @@ functions:
           enabled: true
 
   printoutsEmailAttachmentRecoveryExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-email-attachment-recovery-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-email-attachment-recovery
     handler: dist-lambda/schedules/printous/printoutsEmailAttachmentRecoveryExportSchedule.handler
     description: Scheduled export of printouts/printouts_email_attachment_recovery data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -351,7 +351,7 @@ functions:
           enabled: true
 
   printoutsEmailMd5sumLockExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-email-md5sum-lock-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-email-md5sum-lock
     handler: dist-lambda/schedules/printous/printoutsEmailMd5sumLockExportSchedule.handler
     description: Scheduled export of printouts/printouts_email_md5sum_lock data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -371,7 +371,7 @@ functions:
           enabled: true
 
   printoutsFaultyDataExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-faulty-data-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-faulty-data
     handler: dist-lambda/schedules/printous/printoutsFaultyDataExportSchedule.handler
     description: Scheduled export of printouts/printouts_faulty_data data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -391,7 +391,7 @@ functions:
           enabled: true
 
   printoutsHydrimAdtExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-adt-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim-adt
     handler: dist-lambda/schedules/printous/printoutsHydrimAdtExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_adt data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -411,7 +411,7 @@ functions:
           enabled: true
 
   printoutsHydrimDocuCiExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-ci-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-ci
     handler: dist-lambda/schedules/printous/printoutsHydrimDocuCiExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_docu_ci data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -431,7 +431,7 @@ functions:
           enabled: true
 
   printoutsHydrimDocuEntriesExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries
     handler: dist-lambda/schedules/printous/printoutsHydrimDocuEntriesExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_docu_entries data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -451,7 +451,7 @@ functions:
           enabled: true
 
   printoutsHydrimDocuEntriesNoteExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries-note-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-entries-note
     handler: dist-lambda/schedules/printous/printoutsHydrimDocuEntriesNoteExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_docu_entries_note data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -471,7 +471,7 @@ functions:
           enabled: true
 
   printoutsHydrimDocuGccExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-gcc-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim-docu-gcc
     handler: dist-lambda/schedules/printous/printoutsHydrimDocuGccExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_docu_gcc data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -491,7 +491,7 @@ functions:
           enabled: true
 
   printoutsHydrimExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim
     handler: dist-lambda/schedules/printous/printoutsHydrimExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_s3 data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -511,7 +511,7 @@ functions:
           enabled: true
 
   printoutsHydrimMonthExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-hydrim-month-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-hydrim-month
     handler: dist-lambda/schedules/printous/printoutsHydrimMonthExportSchedule.handler
     description: Scheduled export of printouts/printouts_hydrim_month data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -531,7 +531,7 @@ functions:
           enabled: true
 
   printoutsMovedToArchivesExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-moved-to-archives-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-moved-to-archives
     handler: dist-lambda/schedules/printous/printoutsMovedToArchivesExportSchedule.handler
     description: Scheduled export of printouts/printouts_moved_to_archives data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -551,7 +551,7 @@ functions:
           enabled: true
 
   printoutsStatimAdtExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-adt-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim-adt
     handler: dist-lambda/schedules/printous/printoutsStatimAdtExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_adt data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -571,7 +571,7 @@ functions:
           enabled: true
 
   printoutsStatimDocuCiExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-docu-ci-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-ci
     handler: dist-lambda/schedules/printous/printoutsStatimDocuCiExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_docu_ci data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -591,7 +591,7 @@ functions:
           enabled: true
 
   printoutsStatimDocuEntriesExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-docu-entries-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-entries
     handler: dist-lambda/schedules/printous/printoutsStatimDocuEntriesExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_docu_entries data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -611,7 +611,7 @@ functions:
           enabled: true
 
   printoutsStatimDocuEntriesNoteExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-docu-entries-note-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-entries-note
     handler: dist-lambda/schedules/printous/printoutsStatimDocuEntriesNoteExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_docu_entries_note data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -631,7 +631,7 @@ functions:
           enabled: true
 
   printoutsStatimDocuGccExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-docu-gcc-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim-docu-gcc
     handler: dist-lambda/schedules/printous/printoutsStatimDocuGccExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_docu_gcc data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -651,7 +651,7 @@ functions:
           enabled: true
 
   printoutsStatimExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim
     handler: dist-lambda/schedules/printous/printoutsStatimExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_s3 data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -671,7 +671,7 @@ functions:
           enabled: true
 
   printoutsStatimMonthExportSchedule:
-    name: ${self:service}-${sls:stage}-printouts-statim-month-export-schedule
+    name: ${self:service}-${sls:stage}-printouts-statim-month
     handler: dist-lambda/schedules/printous/printoutsStatimMonthExportSchedule.handler
     description: Scheduled export of printouts/printouts_statim_month data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -691,7 +691,7 @@ functions:
           enabled: true
 
   productsSparePartsImagesExportSchedule:
-    name: ${self:service}-${sls:stage}-products-spare-parts-images-export-schedule
+    name: ${self:service}-${sls:stage}-products-spare-parts-images
     handler: dist-lambda/schedules/productsSparePartsImagesExportSchedule.handler
     description: Scheduled export of products_spare_parts_images data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -711,7 +711,7 @@ functions:
           enabled: true
 
   reportsImagesExportSchedule:
-    name: ${self:service}-${sls:stage}-reports-images-export-schedule
+    name: ${self:service}-${sls:stage}-reports-images
     handler: dist-lambda/schedules/reportsImagesExportSchedule.handler
     description: Scheduled export of reports_images data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -731,7 +731,7 @@ functions:
           enabled: true
 
   reportsUploadExportSchedule:
-    name: ${self:service}-${sls:stage}-reports-upload-export-schedule
+    name: ${self:service}-${sls:stage}-reports-upload
     handler: dist-lambda/schedules/reportsUploadExportSchedule.handler
     description: Scheduled export of reportsUpload data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -751,7 +751,7 @@ functions:
           enabled: true
 
   unitsCfNotificationsExportSchedule:
-    name: ${self:service}-${sls:stage}-units-cf-notifications-export-schedule
+    name: ${self:service}-${sls:stage}-units-cf-notifications
     handler: dist-lambda/schedules/unitsCfNotificationsExportSchedule.handler
     description: Scheduled export of units_cf_notifications data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -771,7 +771,7 @@ functions:
           enabled: true
 
   unitsDailyDetailSummaryExportSchedule:
-    name: ${self:service}-${sls:stage}-units-daily-detail-summary-export-schedule
+    name: ${self:service}-${sls:stage}-units-daily-detail-summary
     handler: dist-lambda/schedules/unitsDailyDetailSummaryExportSchedule.handler
     description: Scheduled export of units_daily_detail_summary data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -791,7 +791,7 @@ functions:
           enabled: true
 
   unitsDailyGeneralCountSummaryExportSchedule:
-    name: ${self:service}-${sls:stage}-units-daily-general-count-summary-export-schedule
+    name: ${self:service}-${sls:stage}-units-daily-general-count-summary
     handler: dist-lambda/schedules/unitsDailyGeneralCountSummaryExportSchedule.handler
     description: Scheduled export of units_daily_general_count_summary data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -811,7 +811,7 @@ functions:
           enabled: true
 
   unitsEncryptedKeysArchivesExportSchedule:
-    name: ${self:service}-${sls:stage}-units-encrypted-keys-archives-export-schedule
+    name: ${self:service}-${sls:stage}-units-encrypted-keys-archives
     handler: dist-lambda/schedules/unitsEncryptedKeysArchivesExportSchedule.handler
     description: Scheduled export of units_encrypted_keys_archives data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
@@ -831,7 +831,7 @@ functions:
           enabled: true
 
   unitsOffsetsExportSchedule:
-    name: ${self:service}-${sls:stage}-units-offsets-export-schedule
+    name: ${self:service}-${sls:stage}-units-offsets
     handler: dist-lambda/schedules/unitsOffsetsExportSchedule.handler
     description: Scheduled export of units_offsets data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}

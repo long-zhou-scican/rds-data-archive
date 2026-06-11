@@ -1,0 +1,89 @@
+service: data-archive-local
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'sandbox'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+    S3_BUCKET: ${env:S3_BUCKET}
+
+functions:
+  auditLogExportSchedule:
+    handler: dist-lambda/schedules/auditLogExportSchedule.handler
+  cycleReportsLogExportSchedule:
+    handler: dist-lambda/schedules/cycleReportsLogExportSchedule.handler
+  fdbuttonsExportSchedule:
+    handler: dist-lambda/schedules/fdbuttonsExportSchedule.handler
+  isUpdateAvailableArchiveExportSchedule:
+    handler: dist-lambda/schedules/isUpdateAvailableArchiveExportSchedule.handler
+  isUpdateAvailableDailyLogExportSchedule:
+    handler: dist-lambda/schedules/isUpdateAvailableDailyLogExportSchedule.handler
+  isupdatesAvailableLogExportSchedule:
+    handler: dist-lambda/schedules/isupdatesAvailableLogExportSchedule.handler
+  onlineAccessTokensExportSchedule:
+    handler: dist-lambda/schedules/onlineAccessTokensExportSchedule.handler
+  printoutsBravoExportSchedule:
+    handler: dist-lambda/schedules/printoutsBravoExportSchedule.handler
+  printoutsEmailAttachmentExportSchedule:
+    handler: dist-lambda/schedules/printoutsEmailAttachmentExportSchedule.handler
+  printoutsEmailAttachmentOldExportSchedule:
+    handler: dist-lambda/schedules/printoutsEmailAttachmentOldExportSchedule.handler
+  printoutsEmailAttachmentRecoveryExportSchedule:
+    handler: dist-lambda/schedules/printoutsEmailAttachmentRecoveryExportSchedule.handler
+  printoutsEmailMd5sumLockExportSchedule:
+    handler: dist-lambda/schedules/printoutsEmailMd5sumLockExportSchedule.handler
+  printoutsFaultyDataExportSchedule:
+    handler: dist-lambda/schedules/printoutsFaultyDataExportSchedule.handler
+  printoutsHydrimAdtExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimAdtExportSchedule.handler
+  printoutsHydrimDocuCiExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimDocuCiExportSchedule.handler
+  printoutsHydrimDocuEntriesExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimDocuEntriesExportSchedule.handler
+  printoutsHydrimDocuEntriesNoteExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimDocuEntriesNoteExportSchedule.handler
+  printoutsHydrimDocuGccExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimDocuGccExportSchedule.handler
+  printoutsHydrimExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimExportSchedule.handler
+  printoutsHydrimMonthExportSchedule:
+    handler: dist-lambda/schedules/printoutsHydrimMonthExportSchedule.handler
+  printoutsMovedToArchivesExportSchedule:
+    handler: dist-lambda/schedules/printoutsMovedToArchivesExportSchedule.handler
+  printoutsStatimAdtExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimAdtExportSchedule.handler
+  printoutsStatimDocuCiExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimDocuCiExportSchedule.handler
+  printoutsStatimDocuEntriesExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimDocuEntriesExportSchedule.handler
+  printoutsStatimDocuEntriesNoteExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimDocuEntriesNoteExportSchedule.handler
+  printoutsStatimDocuGccExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimDocuGccExportSchedule.handler
+  printoutsStatimExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimExportSchedule.handler
+  printoutsStatimMonthExportSchedule:
+    handler: dist-lambda/schedules/printoutsStatimMonthExportSchedule.handler
+  productsSparePartsImagesExportSchedule:
+    handler: dist-lambda/schedules/productsSparePartsImagesExportSchedule.handler
+  reportsImagesExportSchedule:
+    handler: dist-lambda/schedules/reportsImagesExportSchedule.handler
+  reportsUploadExportSchedule:
+    handler: dist-lambda/schedules/reportsUploadExportSchedule.handler
+  unitsCfNotificationsExportSchedule:
+    handler: dist-lambda/schedules/unitsCfNotificationsExportSchedule.handler
+  unitsDailyDetailSummaryExportSchedule:
+    handler: dist-lambda/schedules/unitsDailyDetailSummaryExportSchedule.handler
+  unitsDailyGeneralCountSummaryExportSchedule:
+    handler: dist-lambda/schedules/unitsDailyGeneralCountSummaryExportSchedule.handler
+  unitsEncryptedKeysArchivesExportSchedule:
+    handler: dist-lambda/schedules/unitsEncryptedKeysArchivesExportSchedule.handler
+  unitsOffsetsExportSchedule:
+    handler: dist-lambda/schedules/unitsOffsetsExportSchedule.handler

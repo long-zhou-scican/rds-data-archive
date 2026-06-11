@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node src/update-access-levels.ts",
     "start": "ts-node src/index.ts",
-    "build:lambda": "tsc -p tsconfig.lambda.json",
+    "build:lambda": "tsc -p tsconfig.lambda.json && printf '{\"type\":\"commonjs\"}\n' > dist-lambda/package.json",
     "build:duckdb-layer": "rm -rf layers/duckdb/nodejs/node_modules layers/duckdb/nodejs/package-lock.json && npm_config_target_platform=linux npm_config_target_arch=x64 npm_config_platform=linux npm_config_arch=x64 npm install --prefix layers/duckdb/nodejs --omit=dev",
     "sls:package": "npm run build:duckdb-layer && npm run build:lambda && serverless package",
     "sls:deploy": "npm run build:duckdb-layer && npm run build:lambda && serverless deploy",
