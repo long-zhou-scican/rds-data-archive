@@ -126,6 +126,9 @@ functions:
     handler: dist-lambda/handlers/genericDataSearchHandler.handler
     description: Generic table data search by date range
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    timeout: 30
+    layers:
+      - { Ref: DuckdbLambdaLayer }
     environment:
       DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
       DB_PORT: ${param:dbPort, '3306'}
@@ -143,6 +146,22 @@ functions:
     name: ${self:service}-${sls:stage}-printouts-bravo-export
     handler: dist-lambda/handlers/printoutsBravoExportHandler.handler
     description: Export printouts_bravo data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+
+  printoutsBiosonicExport:
+    name: ${self:service}-${sls:stage}-printouts-biosonic-export
+    handler: dist-lambda/handlers/printoutsBiosonicExportHandler.handler
+    description: Export printouts_biosonic data to S3
     vpc: ${file(env.yml):vpc-${self:provider.stage}}
     environment:
       DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
@@ -173,6 +192,26 @@ functions:
     events:
       - schedule:
           rate: cron(20 3 * * ? *)
+          enabled: false
+
+  printoutsBiosonicExportSchedule:
+    name: ${self:service}-${sls:stage}-printouts-biosonic
+    handler: dist-lambda/schedules/printous/printoutsBiosonicExportSchedule.handler
+    description: Scheduled export of printouts/printouts_biosonic_s3 data to S3
+    vpc: ${file(env.yml):vpc-${self:provider.stage}}
+    environment:
+      DB_HOST: ${ssm:rdsMySqlHost-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PORT: ${param:dbPort, '3306'}
+      DB_USER: ${ssm:rdsMySqlUsername-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_PASSWORD: ${ssm:rdsMySqlPassword-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      DB_NAME: ${ssm:rdsMySqlDb-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      S3_BUCKET: ${ssm:db-parquet-exports-${self:custom.${self:provider.stage}.envSuffix, 'sandbox'}}
+      region: ${self:custom.${self:provider.stage}.region, 'us-east-1'}
+    layers:
+      - { Ref: DuckdbLambdaLayer }
+    events:
+      - schedule:
+          rate: cron(25 3 * * ? *)
           enabled: false
 
   auditLogExportSchedule:

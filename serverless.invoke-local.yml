@@ -31,6 +31,8 @@ functions:
     handler: dist-lambda/schedules/onlineAccessTokensExportSchedule.handler
   printoutsBravoExportSchedule:
     handler: dist-lambda/schedules/printoutsBravoExportSchedule.handler
+  printoutsBiosonicExportSchedule:
+    handler: dist-lambda/schedules/printoutsBiosonicExportSchedule.handler
   printoutsEmailAttachmentExportSchedule:
     handler: dist-lambda/schedules/printoutsEmailAttachmentExportSchedule.handler
   printoutsEmailAttachmentOldExportSchedule:

@@ -25,13 +25,22 @@ if ! aws configure list-profiles 2>/dev/null | grep -Fxq "$PROFILE"; then
   exit 1
 fi
 
+# Preflight auth check so failures are immediate and actionable.
+if ! aws sts get-caller-identity --profile "$PROFILE" >/dev/null 2>&1; then
+  echo "Error: AWS credentials for profile '$PROFILE' are invalid or expired." >&2
+  echo "Fix: run 'aws sso login --profile $PROFILE' and retry." >&2
+  exit 1
+fi
+
+# Export concrete credentials to avoid Serverless failing to parse profile-based SSO configs.
 if creds_env="$(aws configure export-credentials --profile "$PROFILE" --format env 2>/dev/null)"; then
   eval "$creds_env"
   unset AWS_PROFILE
   unset AWS_DEFAULT_PROFILE
 else
-  echo "Warning: could not export credentials for profile '$PROFILE'." >&2
-  echo "Attempting profile-based auth; if this is an SSO profile run: aws sso login --profile $PROFILE" >&2
+  echo "Warning: could not export credentials for profile '$PROFILE'. Using profile-based auth." >&2
+  export AWS_PROFILE="$PROFILE"
+  export AWS_DEFAULT_PROFILE="$PROFILE"
 fi
 
 max_old_space_size="${SLS_NODE_MAX_OLD_SPACE_SIZE:-8192}"

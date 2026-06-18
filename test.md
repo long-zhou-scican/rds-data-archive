@@ -1,3 +1,5 @@
+aws sso login --profile dev
+
 # auditLogExportSchedule
 
 ./dev.sh auditLogExportSchedule
@@ -25,62 +27,119 @@
 # isupdatesAvailableLogExportSchedule:
 
 ./dev.sh isupdatesAvailableLogExportSchedule
-onlineAccessTokensExportSchedule:
+
+# onlineAccessTokensExportSchedule:
+
 ./dev.sh onlineAccessTokensExportSchedule
-printoutsBravoExportSchedule:
+
+# printoutsBravoExportSchedule:
+
 ./dev.sh printoutsBravoExportSchedule
-printoutsEmailAttachmentExportSchedule:
+
+# printoutsEmailAttachmentExportSchedule:
+
 ./dev.sh printoutsEmailAttachmentExportSchedule
-printoutsEmailAttachmentOldExportSchedule:
+
+# printoutsEmailAttachmentOldExportSchedule:
+
 ./dev.sh printoutsEmailAttachmentOldExportSchedule
-printoutsEmailAttachmentRecoveryExportSchedule:
+
+# printoutsEmailAttachmentRecoveryExportSchedule:
+
 ./dev.sh printoutsEmailAttachmentRecoveryExportSchedule
-printoutsEmailMd5sumLockExportSchedule:
+
+# printoutsEmailMd5sumLockExportSchedule:
+
 ./dev.sh printoutsEmailMd5sumLockExportSchedule
-printoutsFaultyDataExportSchedule:
+
+# printoutsFaultyDataExportSchedule:
+
 ./dev.sh printoutsFaultyDataExportSchedule
-printoutsHydrimAdtExportSchedule:
+
+# printoutsHydrimAdtExportSchedule:
+
 ./dev.sh printoutsHydrimAdtExportSchedule
-printoutsHydrimDocuCiExportSchedule:
+
+# printoutsHydrimDocuCiExportSchedule:
+
 ./dev.sh printoutsHydrimDocuCiExportSchedule
-printoutsHydrimDocuEntriesExportSchedule:
+
+# printoutsHydrimDocuEntriesExportSchedule:
+
 ./dev.sh printoutsHydrimDocuEntriesExportSchedule
-printoutsHydrimDocuEntriesNoteExportSchedule:
+
+# printoutsHydrimDocuEntriesNoteExportSchedule:
+
 ./dev.sh printoutsHydrimDocuEntriesNoteExportSchedule
-printoutsHydrimDocuGccExportSchedule:
+
+# printoutsHydrimDocuGccExportSchedule:
+
 ./dev.sh printoutsHydrimDocuGccExportSchedule
-printoutsHydrimExportSchedule:
-./dev.sh printoutsHydrimExportSchedule
-printoutsHydrimMonthExportSchedule:
+
+# printoutsHydrimMonthExportSchedule:
+
 ./dev.sh printoutsHydrimMonthExportSchedule
-printoutsMovedToArchivesExportSchedule:
+
+# printoutsHydrimExportSchedule:
+
+./dev.sh printoutsHydrimExportSchedule
+
+# printoutsMovedToArchivesExportSchedule:
+
 ./dev.sh printoutsMovedToArchivesExportSchedule
-printoutsStatimAdtExportSchedule:
+
+# printoutsStatimAdtExportSchedule:
+
 ./dev.sh printoutsStatimAdtExportSchedule
-printoutsStatimDocuCiExportSchedule:
+
+# printoutsStatimDocuCiExportSchedule:
+
 ./dev.sh printoutsStatimDocuCiExportSchedule
-printoutsStatimDocuEntriesExportSchedule:
+
+# printoutsStatimDocuEntriesExportSchedule:
+
 ./dev.sh printoutsStatimDocuEntriesExportSchedule
-printoutsStatimDocuEntriesNoteExportSchedule:
+
+# printoutsStatimDocuEntriesNoteExportSchedule:
+
 ./dev.sh printoutsStatimDocuEntriesNoteExportSchedule
-printoutsStatimDocuGccExportSchedule:
+
+# printoutsStatimDocuGccExportSchedule:
+
 ./dev.sh printoutsStatimDocuGccExportSchedule
-printoutsStatimExportSchedule:
+
+# printoutsStatimExportSchedule:
+
 ./dev.sh printoutsStatimExportSchedule
-printoutsStatimMonthExportSchedule:
+
+# printoutsStatimMonthExportSchedule:
+
 ./dev.sh printoutsStatimMonthExportSchedule
-productsSparePartsImagesExportSchedule:
+
+# productsSparePartsImagesExportSchedule:
+
 ./dev.sh productsSparePartsImagesExportSchedule
-reportsImagesExportSchedule:
+
+# reportsImagesExportSchedule:
+
 ./dev.sh reportsImagesExportSchedule
-reportsUploadExportSchedule:
+
+# reportsUploadExportSchedule:
+
 ./dev.sh reportsUploadExportSchedule
 
-unitsDailyDetailSummaryExportSchedule:
+# unitsDailyDetailSummaryExportSchedule:
+
 ./dev.sh unitsDailyDetailSummaryExportSchedule
-unitsDailyGeneralCountSummaryExportSchedule:
+
+# unitsDailyGeneralCountSummaryExportSchedule:
+
 ./dev.sh unitsDailyGeneralCountSummaryExportSchedule
-unitsEncryptedKeysArchivesExportSchedule:
+
+# unitsEncryptedKeysArchivesExportSchedule:
+
 ./dev.sh unitsEncryptedKeysArchivesExportSchedule
-unitsOffsetsExportSchedule:
-./dev.sh unitsOffsetsExportSchedule -->
+
+# unitsOffsetsExportSchedule:
+
+./dev.sh unitsOffsetsExportSchedule

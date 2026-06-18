@@ -1,45 +1,233 @@
 {
-  "auditLogService": ["1=1", "timestamp", true, true, true],
-  "cycleReportsLogService": ["date <= DATE_SUB(NOW(), INTERVAL 5 YEAR)", "date", true, false, true],
-  "fdbuttonsService": ["1=1", "date", false, false, false],
-  "isUpdateAvailableArchiveService": ["date_time <= DATE_SUB(NOW(), INTERVAL 4 YEAR)", "date_time", true, false, false],
-  "isUpdateAvailableDailyLogService": [],
-  "isupdatesAvailableLogService": ["date <= DATE_SUB(NOW(), INTERVAL 5 YEAR)", "date", true, false],
-  "onlineAccessTokensService": [],
+  "parameters": ["where", "dateKey", "useDateKey", "isUnixTimeStamp", "isDeleteData"],
+  "auditLogService": ["is_deleted = 0", "timestamp", true, true, true],
+  "cycleReportsLogService": [
+    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date",
+    true,
+    false,
+    true
+  ],
+  "fdbuttonsService": [
+    "is_deleted = 0 AND (createdon is null or createdon <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "createdon",
+    true,
+    false,
+    true
+  ],
+  "isUpdateAvailableArchiveService": [
+    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date_time",
+    true,
+    false,
+    true
+  ],
+  "isUpdateAvailableDailyLogService": [
+    "is_deleted = 0 AND (request_date is null or request_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "request_date",
+    true,
+    false,
+    true
+  ],
+  "isupdatesAvailableLogService": [
+    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date",
+    true,
+    false,
+    true
+  ],
+  "onlineAccessTokensService": [
+    "is_deleted = 0 AND (created_at is null or created_at <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "created_at",
+    true,
+    false,
+    true
+  ],
+  "printoutsBiosonicS3Service": [],
   "printoutsBravoS3Service": [],
-  "printoutsEmailAttachmentOldService": [],
-  "printoutsEmailAttachmentRecoveryService": [],
-  "printoutsEmailAttachmentService": [],
-  "printoutsEmailMd5sumLockService": [],
-  "printoutsFaultyDataService": [],
-  "printoutsHydrimAdtService": [],
-  "printoutsHydrimDocuCiService": [],
-  "printoutsHydrimDocuEntriesNoteService": [],
-  "printoutsHydrimDocuEntriesService": [],
-  "printoutsHydrimDocuGccService": [],
-  "printoutsHydrimMonthService": [],
+  "printoutsEmailAttachmentOldService": [
+    "is_deleted = 0 AND (created_at is null or created_at <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "created_at",
+    true,
+    false,
+    true
+  ],
+  "printoutsEmailAttachmentRecoveryService": [
+    "is_deleted = 0 AND (created_at is null or created_at <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "created_at",
+    true,
+    false,
+    true
+  ],
+  "printoutsEmailAttachmentService": [
+    "is_deleted = 0 AND (created_at is null or created_at <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "created_at",
+    true,
+    false,
+    true
+  ],
+  "printoutsEmailMd5sumLockService": [
+    "is_deleted = 0 AND (timestamp is null or timestamp <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "timestamp",
+    true,
+    false,
+    true
+  ],
+  "printoutsFaultyDataService": [
+    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date_time",
+    true,
+    false,
+    true
+  ],
+  "printoutsHydrimAdtService": [
+    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updated_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsHydrimDocuCiService": [
+    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updated_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsHydrimDocuEntriesNoteService": [
+    "is_deleted = 0 AND (created_date is null or created_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "created_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsHydrimDocuEntriesService": [
+    "is_deleted = 0 AND (creation_date_time is null or creation_date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "creation_date_time",
+    true,
+    true,
+    true
+  ],
+  "printoutsHydrimDocuGccService": [
+    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updated_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsHydrimMonthService": [
+    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date_time",
+    true,
+    false,
+    true
+  ],
   "printoutsHydrimS3Service": [],
-  "printoutsMovedToArchivesService": [],
-  "printoutsStatimAdtService": [],
-  "printoutsStatimDocuCiService": [],
-  "printoutsStatimDocuEntriesNoteService": [],
-  "printoutsStatimDocuEntriesService": [],
-  "printoutsStatimDocuGccService": [],
-  "printoutsStatimMonthService": [],
+  "printoutsMovedToArchivesService": [
+    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date",
+    true,
+    false,
+    true
+  ],
+  "printoutsStatimAdtService": [
+    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updated_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsStatimDocuCiService": [
+    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updated_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsStatimDocuEntriesNoteService": [
+    "is_deleted = 0 AND (created_date is null or created_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "created_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsStatimDocuEntriesService": [
+    "is_deleted = 0 AND (creation_date_time is null or creation_date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "creation_date_time",
+    true,
+    true,
+    true
+  ],
+  "printoutsStatimDocuGccService": [
+    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updated_date",
+    true,
+    false,
+    true
+  ],
+  "printoutsStatimMonthService": [
+    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date_time",
+    true,
+    false,
+    true
+  ],
   "printoutsStatimS3Service": [],
-  "productsSparePartsImagesService": [],
-  "reportsImagesService": [],
-  "reportsUploadService": [],
+  "productsSparePartsImagesService": [
+    "is_deleted = 0 AND (updaloaded is null or updaloaded <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "updaloaded",
+    true,
+    false,
+    true
+  ],
+  "reportsImagesService": [
+    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date",
+    true,
+    false,
+    true
+  ],
+  "reportsUploadService": [
+    "is_deleted = 0 AND (createdon is null or createdon <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "createdon",
+    true,
+    false,
+    true
+  ],
   "unitsCfNotificationsService": [
-    "date_originated <= DATE_SUB(NOW(), INTERVAL 5 YEAR)",
+    "is_deleted = 0 AND (date_originated is null or date_originated <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_originated",
     true,
     false,
-    false
+    true
   ],
-  "unitsDailyDetailSummaryService": [],
-  "unitsDailyGeneralCountSummaryService": [],
-  "unitsEncryptedKeysArchivesService": [],
-  "unitsOffsetsService": [],
+  "unitsDailyDetailSummaryService": [
+    "is_deleted = 0 AND (date_of_summary is null or date_of_summary <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date_of_summary",
+    true,
+    false,
+    true
+  ],
+  "unitsDailyGeneralCountSummaryService": [
+    "is_deleted = 0 AND (date_of_summary is null or date_of_summary <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date_of_summary",
+    true,
+    false,
+    true
+  ],
+  "unitsEncryptedKeysArchivesService": [
+    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "date",
+    true,
+    false,
+    true
+  ],
+  "unitsOffsetsService": [
+    "is_deleted = 0 AND (factory_offsets_update_date is null or factory_offsets_update_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "factory_offsets_update_date",
+    true,
+    false,
+    true
+  ],
   "default": []
 }
