@@ -7,19 +7,21 @@ export type DateRangeSearchInput = {
   start_date: string;
   end_date: string;
   date_column?: string;
+  serialNum?: string;
 };
 
 export class DynamicTableSearchService extends BaseService {
-  async searchByDateRange(input: DateRangeSearchInput): Promise<{ date_column: string; rows: unknown[] }> {
+  async searchByDateRange(input: DateRangeSearchInput): Promise<{ date_column: string; serialNum?: string; rows: unknown[] }> {
     const table = this.toSafeIdentifier(input.table_name);
 
-    const parquetPath = await this.resolveReadableParquetPath(table);
+    const parquetPath = await this.resolveReadableParquetPath(table, input.serialNum?.trim());
     const escapedPath = parquetPath.replace(/'/g, "''");
 
     const duck = await this.createDuckDb();
-    const columnRows = await duck.query<{ column_name: string; column_type: string }>(
-      `DESCRIBE SELECT * FROM read_parquet('${escapedPath}')`
-    );
+    try {
+      const columnRows = await duck.query<{ column_name: string; column_type: string }>(
+        `DESCRIBE SELECT * FROM read_parquet('${escapedPath}')`
+      );
     const columns = columnRows.map(r => String(r.column_name));
 
     const candidateDateColumns = [
@@ -68,40 +70,84 @@ export class DynamicTableSearchService extends BaseService {
       ? this.buildUnixTimestampWhereClause(quotedDateColumn, startLiteral, endLiteral, isDateOnlyEnd)
       : this.buildStandardDateWhereClause(quotedDateColumn, startLiteral, endLiteral, isDateOnlyEnd);
 
+    const requestedSerialNum = input.serialNum?.trim();
+    const serialFilterClause = this.buildSerialFilterClause(requestedSerialNum, columns);
+    const combinedWhereClause = serialFilterClause
+      ? `(${whereClause}) AND (${serialFilterClause})`
+      : whereClause;
+
     const sql = [
       `SELECT * FROM read_parquet('${escapedPath}')`,
-      `WHERE ${whereClause}`,
+      `WHERE ${combinedWhereClause}`,
       `ORDER BY ${quotedDateColumn} ASC`,
       `LIMIT 1000`,
     ].join("\n      ");
-    console.log(`Executing SQL on DuckDB:\n${sql}`);
-    const rows = await duck.query<unknown>(sql);
-    return { date_column: dateColumn, rows };
+      console.log(`Executing SQL on DuckDB:\n${sql}`);
+      const rows = await duck.query<unknown>(sql);
+      return {
+        date_column: dateColumn,
+        ...(requestedSerialNum ? { serialNum: requestedSerialNum } : {}),
+        rows,
+      };
+    } finally {
+      await duck.close();
+    }
   }
 
-  private async resolveReadableParquetPath(table: string): Promise<string> {
+  private async resolveReadableParquetPath(table: string, serialNum?: string): Promise<string> {
     const bucket = process.env.S3_BUCKET;
     if (!bucket) {
       throw new Error("Missing S3_BUCKET environment variable");
     }
-    console.log(`Resolving parquet path for table ${table} in bucket ${bucket}`);
+    console.log(`Resolving parquet path for table ${table} in bucket ${bucket}${serialNum ? ` (serial: ${serialNum})` : ''}`);
 
-    const preferredPrefix =  "database";
-    // const fallbackPrefix = preferredPrefix === "database" ? "printouts" : "database";
+    const preferredPrefix = "database";
+
+    // If a serial number is provided, try the direct serial-partitioned path first.
+    // This avoids globbing thousands of partition files.
+    if (serialNum) {
+      const safeSerial = serialNum.replace(/[^A-Za-z0-9._-]/g, '_');
+      const directCandidates = [
+        `s3://${bucket}/${preferredPrefix}/${table}/${safeSerial}/${table}-${safeSerial}.parquet`,
+        `s3://${bucket}/${preferredPrefix}/${table}/${safeSerial}/*.parquet`,
+      ];
+
+      const duck = await this.createDuckDb();
+      try {
+        for (const path of directCandidates) {
+          const escapedPath = path.replace(/'/g, "''");
+          try {
+            await duck.query(`SELECT 1 FROM read_parquet('${escapedPath}') LIMIT 1`);
+            console.log(`Resolved direct serial path: ${path}`);
+            return path;
+          } catch {
+            // Try next candidate
+          }
+        }
+      } finally {
+        await duck.close();
+      }
+      console.log(`Direct serial path not found for ${safeSerial}, falling back to glob`);
+    }
+
+    // Fallback: glob all parquet files for the table
     const candidates = [
       `s3://${bucket}/${preferredPrefix}/${table}/**/*.parquet`,
-      // `s3://${bucket}/${fallbackPrefix}/${table}/**/*.parquet`,
     ];
     console.log(`Resolving parquet path for table ${table}. Candidate paths: ${candidates.join(", ")}`);
     const duck = await this.createDuckDb();
-    for (const path of candidates) {
-      const escapedPath = path.replace(/'/g, "''");
-      try {
-        await duck.query(`SELECT 1 FROM read_parquet('${escapedPath}') LIMIT 1`);
-        return path;
-      } catch {
-        // Try next candidate path.
+    try {
+      for (const path of candidates) {
+        const escapedPath = path.replace(/'/g, "''");
+        try {
+          await duck.query(`SELECT 1 FROM read_parquet('${escapedPath}') LIMIT 1`);
+          return path;
+        } catch {
+          // Try next candidate path.
+        }
       }
+    } finally {
+      await duck.close();
     }
 
     throw new Error(`No parquet files found in S3 for table ${table}`);
@@ -166,6 +212,20 @@ export class DynamicTableSearchService extends BaseService {
 
   private toDuckDbIdentifier(identifier: string): string {
     return `"${identifier.replace(/"/g, '""')}"`;
+  }
+
+  private buildSerialFilterClause(serialNum: string | undefined, columns: string[]): string | undefined {
+    if (!serialNum) {
+      return undefined;
+    }
+
+    if (!columns.includes("serial_num")) {
+      throw new Error("serialNum was provided but 'serial_num' column was not found on S3 parquet");
+    }
+
+    const quotedSerialColumn = this.toDuckDbIdentifier("serial_num");
+    const serialLiteral = this.toSqlStringLiteral(serialNum);
+    return `TRIM(${quotedSerialColumn}) = ${serialLiteral}`;
   }
 }
 

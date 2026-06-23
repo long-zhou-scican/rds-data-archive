@@ -1,4 +1,4 @@
-aws sso login --profile dev
+# aws sso login --profile dev
 
 # auditLogExportSchedule
 

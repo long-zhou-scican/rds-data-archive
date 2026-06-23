@@ -16,7 +16,7 @@
     true
   ],
   "isUpdateAvailableArchiveService": [
-    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_time",
     true,
     false,
@@ -74,7 +74,7 @@
     true
   ],
   "printoutsFaultyDataService": [
-    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_time",
     true,
     false,
@@ -102,7 +102,7 @@
     true
   ],
   "printoutsHydrimDocuEntriesService": [
-    "is_deleted = 0 AND (creation_date_time is null or creation_date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND (creation_ creation_date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "creation_date_time",
     true,
     true,
@@ -116,7 +116,7 @@
     true
   ],
   "printoutsHydrimMonthService": [
-    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_time",
     true,
     false,
@@ -124,49 +124,49 @@
   ],
   "printoutsHydrimS3Service": [],
   "printoutsMovedToArchivesService": [
-    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND  date <= DATE_SUB(NOW(), INTERVAL 5 YEAR)",
     "date",
     true,
     false,
     true
   ],
   "printoutsStatimAdtService": [
-    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "updated_date",
     true,
     false,
     true
   ],
   "printoutsStatimDocuCiService": [
-    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "updated_date",
     true,
     false,
     true
   ],
   "printoutsStatimDocuEntriesNoteService": [
-    "is_deleted = 0 AND (created_date is null or created_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( created_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "created_date",
     true,
     false,
     true
   ],
   "printoutsStatimDocuEntriesService": [
-    "is_deleted = 0 AND (creation_date_time is null or creation_date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( creation_date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "creation_date_time",
     true,
     true,
     true
   ],
   "printoutsStatimDocuGccService": [
-    "is_deleted = 0 AND (updated_date is null or updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( updated_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "updated_date",
     true,
     false,
     true
   ],
   "printoutsStatimMonthService": [
-    "is_deleted = 0 AND (date_time is null or date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( date_time <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_time",
     true,
     false,
@@ -202,28 +202,28 @@
     true
   ],
   "unitsDailyDetailSummaryService": [
-    "is_deleted = 0 AND (date_of_summary is null or date_of_summary <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( date_of_summary <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_of_summary",
     true,
     false,
     true
   ],
   "unitsDailyGeneralCountSummaryService": [
-    "is_deleted = 0 AND (date_of_summary is null or date_of_summary <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND ( date_of_summary <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "date_of_summary",
     true,
     false,
     true
   ],
   "unitsEncryptedKeysArchivesService": [
-    "is_deleted = 0 AND (date is null or date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND  date <= DATE_SUB(NOW(), INTERVAL 5 YEAR)",
     "date",
     true,
     false,
     true
   ],
   "unitsOffsetsService": [
-    "is_deleted = 0 AND (factory_offsets_update_date is null or factory_offsets_update_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
+    "is_deleted = 0 AND (factory_offsets_update_date <= DATE_SUB(NOW(), INTERVAL 5 YEAR))",
     "factory_offsets_update_date",
     true,
     false,

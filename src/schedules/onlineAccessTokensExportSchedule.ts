@@ -7,7 +7,7 @@ export const handler = async (): Promise<{ message: string; keys: string[] }> =>
     console.warn("onlineAccessTokensService ignores configured export args; using default export()");
   }
   console.log(`Starting scheduled export for online_access_tokens with args: ${JSON.stringify(exportArgs)}`);
-  const result = await onlineAccessTokensService.export(...exportArgs);
+  const result = await onlineAccessTokensService.exportBySerialNumber(exportArgs[0], true, 'serial_number');
   const keys = Array.isArray(result) ? result : [result];
   console.log(`Scheduled export completed for online_access_tokens. Files: ${keys.length}`);
 

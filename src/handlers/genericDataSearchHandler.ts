@@ -4,7 +4,13 @@ import {
 } from "../services/dynamicTableSearchService.js";
 
 type ApiEvent = {
-  body?: string | { table_name?: unknown; start_date?: unknown; end_date?: unknown; date_column?: unknown };
+  body?: string | {
+    table_name?: unknown;
+    start_date?: unknown;
+    end_date?: unknown;
+    date_column?: unknown;
+    serialNum?: unknown;
+  };
 };
 
 const json = (statusCode: number, payload: unknown) => ({
@@ -26,6 +32,7 @@ export const handler = async (event: ApiEvent) => {
     const start_date = String(bodyRaw?.start_date ?? "").trim();
     const end_date = String(bodyRaw?.end_date ?? "").trim();
     const date_column = String(bodyRaw?.date_column ?? "").trim();
+    const serialNum = String(bodyRaw?.serialNum ?? "").trim();
 
     if (!table_name || !start_date || !end_date) {
       return json(400, {
@@ -38,11 +45,13 @@ export const handler = async (event: ApiEvent) => {
       start_date,
       end_date,
       ...(date_column ? { date_column } : {}),
+      ...(serialNum ? { serialNum } : {}),
     };
     const result = await dynamicTableSearchService.searchByDateRange(payload);
     return json(200, {
       table_name,
       date_column: result.date_column,
+      serialNum: result.serialNum,
       count: result.rows.length,
       data: result.rows,
     });
